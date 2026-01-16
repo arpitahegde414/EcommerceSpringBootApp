@@ -1,0 +1,26 @@
+package com.example.inventoryservice.model;
+
+import jakarta.persistence.*;
+import lombok.Data;
+
+import java.time.LocalDate;
+
+@Entity
+@Table(name="inventory_batch")
+@Data
+public class InventoryBatch {
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "batch_id")
+    private Long batchId;
+
+    @ManyToOne
+    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    private Product product;
+
+    @Column(name = "quantity", nullable = false)
+    private Integer quantity;
+
+    @Column(name = "expiry_date", nullable = false)
+    private LocalDate expiryDate;
+}
