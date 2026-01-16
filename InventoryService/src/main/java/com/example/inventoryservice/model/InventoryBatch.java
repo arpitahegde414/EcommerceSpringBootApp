@@ -15,7 +15,7 @@ public class InventoryBatch {
     private Long batchId;
 
     @ManyToOne
-    @JoinColumn(name = "product_id", referencedColumnName = "id")
+    @JoinColumn(name = "product_id", referencedColumnName = "id",nullable = false)
     private Product product;
 
     @Column(name = "quantity", nullable = false)
