@@ -6,7 +6,7 @@ import com.example.orderservice.dto.InventoryResponse;
 import com.example.orderservice.dto.OrderResponse;
 import com.example.orderservice.model.Product;
 import com.example.orderservice.repository.OrderRepository;
-import com.example.orderservice.model.Order;
+import com.example.orderservice.model.Orders;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -55,13 +55,13 @@ public class OrderServiceImpl implements OrderService {
             throw new RuntimeException("Could not fulfill complete order quantity");
         }
         // 4. Create order
-        Order order = new Order();
+        Orders order = new Orders();
         Product p = new Product();
-        p.setId(productId);
+        p.setProduct_id(productId);
         p.setProductName(inventory.getProductName());
         order.setProduct(p);
         order.setQuantity(quantity);
-        order.setStatus(Order.OrderStatus.PLACED);
+        order.setStatus(Orders.OrderStatus.PLACED);
         order.setOrderDate(LocalDate.now());
         order.setReservedBatchIds(
                 reservedBatchIds.stream()
@@ -69,13 +69,13 @@ public class OrderServiceImpl implements OrderService {
                         .collect(Collectors.joining(","))
         );
 
-        Order savedOrder = orderRepository.save(order);
+        Orders savedOrder = orderRepository.save(order);
         log.info("Order created successfully - OrderId: {}", savedOrder.getId());
 
         // 5. Build response
         return new OrderResponse(
                 savedOrder.getId(),
-                savedOrder.getProduct().getId(),
+                savedOrder.getProduct().getProduct_id(),
                 savedOrder.getProduct().getProductName(),
                 savedOrder.getQuantity(),
                 savedOrder.getStatus(),

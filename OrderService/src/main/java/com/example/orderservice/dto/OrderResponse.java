@@ -1,6 +1,6 @@
 package com.example.orderservice.dto;
 
-import com.example.orderservice.model.Order;
+import com.example.orderservice.model.Orders;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
@@ -15,7 +15,7 @@ public class OrderResponse {
     private Long productId;
     private String productName;
     private Integer quantity;
-    private Order.OrderStatus status;
+    private Orders.OrderStatus status;
     private List<Long> reservedFromBatchIds;
     private String message;
 }

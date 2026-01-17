@@ -4,18 +4,17 @@ import jakarta.persistence.*;
 import lombok.Data;
 
 import java.time.LocalDate;
-import java.util.Date;
 
 @Data
 @Entity
-@Table(name="Order")
-public class Order {
+@Table(name="orders")
+public class Orders {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
     private Long id;
 
     @ManyToOne
-    @JoinColumn(name="product_id", referencedColumnName = "id")
+    @JoinColumn(name="product_id", referencedColumnName = "product_id",nullable = false)
     private Product product;
 
     @Column(name="quantity", nullable = false)

@@ -15,7 +15,7 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 public class InventoryServiceClient {
-    private final RestTemplate restTemplate;
+//    private final RestTemplate restTemplate;
 
     @Value("${inventory.service.url}")
     private String inventoryServiceUrl;
@@ -26,8 +26,9 @@ public class InventoryServiceClient {
                 " By hiting url: "+ checkavailibilityUrl);
 
         try{
-            Map<String, Object> response = restTemplate.getForObject(checkavailibilityUrl, Map.class);
-            return response!=null && (Boolean) response.get("available");
+//            Map<String, Object> response = restTemplate.getForObject(checkavailibilityUrl, Map.class);
+//            return response!=null && (Boolean) response.get("available");
+            return false;
         }catch(Exception e){
             log.error("Error checking availability", e);
             return false;
@@ -38,8 +39,9 @@ public class InventoryServiceClient {
         log.info("Getting inventory for product id: "+ productId);
         String getInventoryUrl = inventoryServiceUrl+"/"+productId;
         try{
-           return restTemplate.getForObject(getInventoryUrl,
-                    InventoryResponse.class);
+//           return restTemplate.getForObject(getInventoryUrl,
+//                    InventoryResponse.class);
+            return null;
         }
         catch ( Exception e){
             log.error("Error calling Inventory Service", e);
@@ -54,7 +56,7 @@ public class InventoryServiceClient {
         request.put("batchId", batchId);
         request.put("quantityToDeduct", quantityFromBatch);
         try{
-            restTemplate.postForObject(updateInventoryUrl, request, Map.class);
+//            restTemplate.postForObject(updateInventoryUrl, request, Map.class);
             log.info("Updated inventory");
         }
         catch (Exception e){
