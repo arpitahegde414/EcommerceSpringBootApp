@@ -5,6 +5,7 @@ import com.example.inventoryservice.dto.InventoryResponse;
 import com.example.inventoryservice.model.InventoryBatch;
 import com.example.inventoryservice.repository.InventoryRepository;
 import jakarta.transaction.Transactional;
+import lombok.AllArgsConstructor;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,22 +19,21 @@ import java.util.stream.Collectors;
 @Slf4j
 public class DefaultInventoryService implements InventoryHandler {
 
-    @Autowired
-    private InventoryRepository inventoryRepository;
+    private final InventoryRepository inventoryRepository;
 
-    public InventoryResponse getInventoryByProductId(Long productId) {
-        log.info("Getting inventory batch by product id: "+ productId);
-        List<InventoryBatch> batches = inventoryRepository.findByProduct_IdOrderByExpiryDateAsc(productId);
+    public InventoryResponse getInventoryByProductId(Long product_Id) {
+        log.info("Getting inventory batch by product id: "+ product_Id);
+        List<InventoryBatch> batches = inventoryRepository.findByProduct_IdOrderByExpiryDateAsc(product_Id);
 
         if (batches.isEmpty()) {
-            throw new RuntimeException("Product not found: " + productId);
+            throw new RuntimeException("Product not found: " + product_Id);
         }
         String productName = batches.get(0).getProduct().getProductName();
 
         List<BatchDto> batchDtos = batches.stream().map(b->
                 new BatchDto(b.getBatchId(), b.getQuantity(), b.getExpiryDate()))
                 .collect(Collectors.toList());
-        return new InventoryResponse(productId, productName, batchDtos);
+        return new InventoryResponse(product_Id, productName, batchDtos);
     }
 
     @Override

@@ -17,7 +17,7 @@ import java.util.Map;
 public class InventoryController {
 
     //build inventory service which is needed for the API
-    private final InventoryHandler inventoryService = new DefaultInventoryService();
+    private final InventoryHandler inventoryService;
 
     @GetMapping("/{productId}")
     @Operation(summary="Get Inventory by productId",

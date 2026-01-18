@@ -15,20 +15,21 @@ import java.util.Map;
 @RequiredArgsConstructor
 @Slf4j
 public class InventoryServiceClient {
-//    private final RestTemplate restTemplate;
+    private final RestTemplate restTemplate;
 
     @Value("${inventory.service.url}")
     private String inventoryServiceUrl;
 
     public boolean checkAvailability(Long productId, Integer quantity){
-        String checkAvailabilityUrl = inventoryServiceUrl+"/inventory/check-availability";
+
+        String checkAvailabilityUrl = inventoryServiceUrl+"/inventory/check-availability"+
+                "?productId=" + productId + "&quantity=" + quantity;
         log.info("Checking the Availibility for productId: "+productId+" Quantity: "+quantity+" " +
                 " By hiting url: "+ checkAvailabilityUrl);
 
         try{
-//            Map<String, Object> response = restTemplate.getForObject(checkAvailabilityUrl, Map.class);
-//            return response!=null && (Boolean) response.get("available");
-            return false;
+            Map<String, Object> response = restTemplate.getForObject(checkAvailabilityUrl, Map.class);
+            return response!=null && (Boolean) response.get("available");
         }catch(Exception e){
             log.error("Error checking availability", e);
             return false;
@@ -37,11 +38,10 @@ public class InventoryServiceClient {
 
     public InventoryResponse getInventory(Long productId) {
         log.info("Getting inventory for product id: "+ productId);
-        String getInventoryUrl = inventoryServiceUrl+"/"+productId;
+        String getInventoryUrl = inventoryServiceUrl+"/inventory/"+productId;
         try{
-//           return restTemplate.getForObject(getInventoryUrl,
-//                    InventoryResponse.class);
-            return null;
+           return restTemplate.getForObject(getInventoryUrl,
+                    InventoryResponse.class);
         }
         catch ( Exception e){
             log.error("Error calling Inventory Service", e);
@@ -51,12 +51,12 @@ public class InventoryServiceClient {
 
     public void updateInventory(Long batchId, Integer quantityFromBatch) {
         log.info("Updating inventory for batchId: "+ batchId+" Quantity: "+ quantityFromBatch);
-        String updateInventoryUrl = inventoryServiceUrl+"/update";
+        String updateInventoryUrl = inventoryServiceUrl+"/inventory/update";
         Map<String,Object> request = new HashMap<>();
         request.put("batchId", batchId);
         request.put("quantityToDeduct", quantityFromBatch);
         try{
-//            restTemplate.postForObject(updateInventoryUrl, request, Map.class);
+            restTemplate.postForObject(updateInventoryUrl, request, Map.class);
             log.info("Updated inventory");
         }
         catch (Exception e){

@@ -10,7 +10,7 @@ import java.util.List;
 @Repository
 public interface InventoryRepository extends JpaRepository<InventoryBatch, Long> {
 
-    @Query("SELECT ib FROM InventoryBatch ib WHERE ib.product.product_id = :productId ORDER BY ib.expiryDate ASC")
+    @Query("SELECT ib FROM InventoryBatch ib WHERE ib.product.product_id = :product_id ORDER BY ib.expiryDate ASC")
     List<InventoryBatch> findByProduct_IdOrderByExpiryDateAsc(Long product_id);
 
 }

@@ -7,6 +7,7 @@ import com.example.orderservice.dto.OrderResponse;
 import com.example.orderservice.model.Product;
 import com.example.orderservice.repository.OrderRepository;
 import com.example.orderservice.model.Orders;
+import com.example.orderservice.repository.ProductRepository;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -15,6 +16,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -22,12 +24,18 @@ import java.util.stream.Collectors;
 @Slf4j
 public class OrderServiceImpl implements OrderService {
     private final OrderRepository orderRepository;
+    private final ProductRepository productRepository;
     private final InventoryServiceClient inventoryServiceClient;
 
     @Transactional
     @Override
     public OrderResponse placeOrder(Long productId, Integer quantity) {
         log.info("Starting to place order for productId: "+productId+" Quantity: "+quantity);
+        //1. check if product id exists
+        Optional<Product> p = productRepository.findById(productId);
+        if(p.isEmpty()){
+            throw new RuntimeException("Product not found: " + productId);
+        }
         //1.check if product id and quantity exists
         if(!inventoryServiceClient.checkAvailability(productId, quantity)){
             throw new RuntimeException("Insufficient inventory for product: " + productId);
@@ -56,10 +64,10 @@ public class OrderServiceImpl implements OrderService {
         }
         // 4. Create order
         Orders order = new Orders();
-        Product p = new Product();
-        p.setProduct_id(productId);
-        p.setProductName(inventory.getProductName());
-        order.setProduct(p);
+        Product p1 = new Product();
+        p1.setProduct_id(productId);
+        p1.setProductName(inventory.getProductName());
+        order.setProduct(p1);
         order.setQuantity(quantity);
         order.setStatus(Orders.OrderStatus.PLACED);
         order.setOrderDate(LocalDate.now());

@@ -11,6 +11,7 @@ import java.time.LocalDate;
 public class Orders {
     @Id
     @GeneratedValue(strategy=GenerationType.IDENTITY)
+    @Column(name="order_id")
     private Long id;
 
     @ManyToOne

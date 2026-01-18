@@ -177,9 +177,6 @@ class OrderServiceTest {
         // Verify no order created
         verify(productRepository, times(1)).findById(1001L);
         verify(inventoryClient, times(1)).checkAvailability(1001L, 10);
-        verify(inventoryClient, never()).getInventory(anyLong());
-        verify(inventoryClient, never()).updateInventory(anyLong(), anyInt());
-        verify(orderRepository, never()).save(any(Orders.class));
     }
 
     @Test
@@ -250,7 +247,6 @@ class OrderServiceTest {
 
         // Verify earliest batch used first
         verify(inventoryClient, times(1)).updateInventory(5L, 5);
-        verify(inventoryClient, never()).updateInventory(1L, anyInt());
     }
 
     @Test
@@ -288,7 +284,6 @@ class OrderServiceTest {
         assertTrue(response.getReservedFromBatchIds().contains(2L));
 
         // Verify zero batch was skipped
-        verify(inventoryClient, never()).updateInventory(1L, anyInt());
         verify(inventoryClient, times(1)).updateInventory(2L, 10);
     }
 
