@@ -5,7 +5,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.MediaType;
-import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
@@ -13,9 +12,6 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 
 @SpringBootTest
 @AutoConfigureMockMvc
-@TestPropertySource(properties = {
-        "spring.liquibase.enabled=false"
-})
 class InventoryControllerIntegrationTest {
 
     @Autowired
@@ -26,7 +22,7 @@ class InventoryControllerIntegrationTest {
         mockMvc.perform(get("/inventory/1001"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.productId").value(1001))
-                .andExpect(jsonPath("$.productName").value("Laptop"))
+                .andExpect(jsonPath("$.name").value("Laptop"))
                 .andExpect(jsonPath("$.batches").isArray());
     }
 
@@ -45,5 +41,71 @@ class InventoryControllerIntegrationTest {
                         .content(requestJson))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.message").value("Inventory updated successfully"));
+    }
+
+    @Test
+    void testCheckAvailability_ProductAvailable() throws Exception {
+        mockMvc.perform(get("/inventory/check-availability")
+                        .param("productId", "1001")
+                        .param("quantity", "50"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.productId").value(1001))
+                .andExpect(jsonPath("$.requestedQuantity").value(50))
+                .andExpect(jsonPath("$.available").value(true));
+    }
+
+    @Test
+    void testCheckAvailability_InsufficientStock() throws Exception {
+        mockMvc.perform(get("/inventory/check-availability")
+                        .param("productId", "1001")
+                        .param("quantity", "1000"))  // More than available
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.productId").value(1001))
+                .andExpect(jsonPath("$.requestedQuantity").value(1000))
+                .andExpect(jsonPath("$.available").value(false));
+    }
+
+    @Test
+    void testCheckAvailability_NonExistentProduct() throws Exception {
+        mockMvc.perform(get("/inventory/check-availability")
+                        .param("productId", "9999")
+                        .param("quantity", "10"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.productId").value(9999))
+                .andExpect(jsonPath("$.requestedQuantity").value(10))
+                .andExpect(jsonPath("$.available").value(false));
+    }
+
+    @Test
+    void testCheckAvailability_ZeroQuantity() throws Exception {
+        mockMvc.perform(get("/inventory/check-availability")
+                        .param("productId", "1001")
+                        .param("quantity", "0"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.requestedQuantity").value(0))
+                .andExpect(jsonPath("$.available").value(true));
+    }
+
+    @Test
+    void testCheckAvailability_ResponseFields() throws Exception {
+        mockMvc.perform(get("/inventory/check-availability")
+                        .param("productId", "1001")
+                        .param("quantity", "25"))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.productId").exists())
+                .andExpect(jsonPath("$.requestedQuantity").exists())
+                .andExpect(jsonPath("$.available").exists());
+    }
+
+    @Test
+    void testUpdateInventory_BatchNotFound() throws Exception {
+        String requestJson = "{\"batchId\":9999,\"quantityToDeduct\":10}";
+
+        mockMvc.perform(post("/inventory/update")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(requestJson))
+                .andExpect(status().isBadRequest())
+                .andExpect(jsonPath("$.error").exists())
+                .andExpect(jsonPath("$.error").value("Batch not found: 9999"));
     }
 }
