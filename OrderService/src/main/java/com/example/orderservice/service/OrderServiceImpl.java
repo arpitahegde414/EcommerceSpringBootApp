@@ -29,7 +29,7 @@ public class OrderServiceImpl implements OrderService {
     public OrderResponse placeOrder(Long productId, Integer quantity) {
         log.info("Starting to place order for productId: "+productId+" Quantity: "+quantity);
         //1.check if product id and quantity exists
-        if(!inventoryServiceClient.checkAvailibility(productId, quantity)){
+        if(!inventoryServiceClient.checkAvailability(productId, quantity)){
             throw new RuntimeException("Insufficient inventory for product: " + productId);
         }
         //2. Get all batches for the product id

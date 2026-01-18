@@ -20,13 +20,13 @@ public class InventoryServiceClient {
     @Value("${inventory.service.url}")
     private String inventoryServiceUrl;
 
-    public boolean checkAvailibility(Long productId, Integer quantity){
-        String checkavailibilityUrl = inventoryServiceUrl+"/inventory/check-availability";
+    public boolean checkAvailability(Long productId, Integer quantity){
+        String checkAvailabilityUrl = inventoryServiceUrl+"/inventory/check-availability";
         log.info("Checking the Availibility for productId: "+productId+" Quantity: "+quantity+" " +
-                " By hiting url: "+ checkavailibilityUrl);
+                " By hiting url: "+ checkAvailabilityUrl);
 
         try{
-//            Map<String, Object> response = restTemplate.getForObject(checkavailibilityUrl, Map.class);
+//            Map<String, Object> response = restTemplate.getForObject(checkAvailabilityUrl, Map.class);
 //            return response!=null && (Boolean) response.get("available");
             return false;
         }catch(Exception e){
