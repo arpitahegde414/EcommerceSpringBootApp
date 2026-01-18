@@ -3,6 +3,7 @@ package com.example.inventoryservice.controller;
 import com.example.inventoryservice.dto.InventoryResponse;
 import com.example.inventoryservice.service.DefaultInventoryService;
 import com.example.inventoryservice.service.InventoryHandler;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -19,8 +20,8 @@ public class InventoryController {
     private final InventoryHandler inventoryService = new DefaultInventoryService();
 
     @GetMapping("/{productId}")
-//    @Operation(summary="Get Inventory by productId",
-//    description = "Returns list of inventory batches sorted by expiry date")
+    @Operation(summary="Get Inventory by productId",
+    description = "Returns list of inventory batches sorted by expiry date")
     public ResponseEntity<InventoryResponse> getInventory(@PathVariable Long productId) {
         try {
             InventoryResponse response = inventoryService.getInventoryByProductId(productId);
@@ -31,8 +32,8 @@ public class InventoryController {
     }
 
     @PostMapping("/update")
-//    @Operation(summary = "Update inventory",
-//            description = "Updates inventory after an order is placed")
+    @Operation(summary = "Update inventory",
+            description = "Updates inventory after an order is placed")
     public ResponseEntity<Map<String, Object>> updateInventory(
             @RequestBody Map<String, Object> request) {
         try {
@@ -54,8 +55,8 @@ public class InventoryController {
     }
 
     @GetMapping("/check-availability")
-//    @Operation(summary = "Check availability",
-//            description = "Check if product quantity is available")
+    @Operation(summary = "Check availability",
+            description = "Check if product quantity is available")
     public ResponseEntity<Map<String, Object>> checkAvailability(
             @RequestParam Long productId,
             @RequestParam Integer quantity) {

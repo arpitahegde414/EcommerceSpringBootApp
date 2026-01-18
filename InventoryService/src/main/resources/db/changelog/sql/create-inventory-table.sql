@@ -3,7 +3,7 @@ CREATE TABLE inventory_batch (
                                  product_id BIGINT NOT NULL,
                                  quantity INT NOT NULL,
                                  expiry_date DATE NOT NULL,
-    CONSTRAINT fk_inventory_prodct FOREIGN KEY (product_id) REFERENCES (product_id)
+    CONSTRAINT fk_inventory_prodct FOREIGN KEY (product_id) REFERENCES product(product_id)
 );
 
 CREATE INDEX idx_product_id ON inventory_batch(product_id);

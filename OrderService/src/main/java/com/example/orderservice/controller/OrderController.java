@@ -3,6 +3,7 @@ package com.example.orderservice.controller;
 import com.example.orderservice.dto.OrderRequest;
 import com.example.orderservice.dto.OrderResponse;
 import com.example.orderservice.service.OrderService;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.HttpStatusCode;
@@ -23,6 +24,9 @@ public class OrderController {
     private final OrderService orderService;
 
     @PostMapping
+    @Operation(summary = "Place an order",
+            description = "Places an order and updates inventory accordingly")
+
     public ResponseEntity<?> placeOrder(@RequestBody OrderRequest request){
         try{
             //validate request
