@@ -52,3 +52,104 @@ The service will start on `http://localhost:8080`
 - JDK 17 or higher
 - Maven 3.6+
 - Git
+
+## API Documentation
+
+### Inventory Service (Port 8081)
+
+#### 1. Get Inventory by Product ID
+```http
+GET http://localhost:8081/inventory/{productId}
+```
+
+**Response:**
+```json
+{
+  "productId": 1001,
+  "productName": "Laptop",
+  "batches": [
+    {
+      "batchId": 1,
+      "quantity": 68,
+      "expiryDate": "2026-06-25"
+    }
+  ]
+}
+```
+
+#### 2. Update Inventory
+```http
+POST http://localhost:8081/inventory/update
+Content-Type: application/json
+
+{
+  "batchId": 1,
+  "quantityToDeduct": 10
+}
+```
+
+**Response:**
+```json
+{
+  "message": "Inventory updated successfully",
+  "batchId": 1,
+  "remainingQuantity": 58
+}
+```
+
+### Order Service (Port 8080)
+
+#### Place Order
+```http
+POST http://localhost:8080/order
+Content-Type: application/json
+
+{
+  "productId": 1002,
+  "quantity": 3
+}
+```
+
+**Response:**
+```json
+{
+  "orderId": 11,
+  "productId": 1002,
+  "productName": "Smartphone",
+  "quantity": 3,
+  "status": "PLACED",
+  "reservedFromBatchIds": [9],
+  "message": "Order placed. Inventory reserved."
+}
+```
+
+## Swagger UI
+
+- Inventory Service: http://localhost:8081/swagger-ui.html
+- Order Service: http://localhost:8080/swagger-ui.html
+
+## H2 Console
+
+- Inventory Service: http://localhost:8081/h2-console
+    - JDBC URL: `jdbc:h2:mem:inventorydb`
+    - Username: `sa`
+    - Password: (empty)
+
+- Order Service: http://localhost:8080/h2-console
+    - JDBC URL: `jdbc:h2:mem:orderdb`
+    - Username: `sa`
+    - Password: (empty)
+
+## Testing
+
+### Run All Tests
+
+```bash
+# Inventory Service
+cd inventory-service
+mvn test
+
+# Order Service
+cd order-service
+mvn test
+```
