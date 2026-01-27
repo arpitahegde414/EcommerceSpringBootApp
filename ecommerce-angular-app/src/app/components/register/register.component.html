@@ -1,0 +1,94 @@
+<div class="auth-container">
+  <div class="auth-card">
+    <div class="auth-header">
+      <h2>🛒 E-Commerce Portal</h2>
+      <p>Create your account to get started</p>
+    </div>
+
+    <div class="auth-body">
+      <div class="alert alert-error" *ngIf="errorMessage">
+        {{ errorMessage }}
+      </div>
+
+      <div class="alert alert-success" *ngIf="successMessage">
+        {{ successMessage }}
+      </div>
+
+      <form (ngSubmit)="onSubmit()" #registerForm="ngForm">
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input
+            type="text"
+            class="form-input"
+            [(ngModel)]="registerData.fullName"
+            name="fullName"
+            required
+            #fullName="ngModel"
+          >
+          <div class="error-message" *ngIf="fullName.invalid && fullName.touched">
+            Full name is required
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Username</label>
+          <input
+            type="text"
+            class="form-input"
+            [(ngModel)]="registerData.username"
+            name="username"
+            required
+            #username="ngModel"
+          >
+          <div class="error-message" *ngIf="username.invalid && username.touched">
+            Username is required
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Email</label>
+          <input
+            type="email"
+            class="form-input"
+            [(ngModel)]="registerData.email"
+            name="email"
+            required
+            email
+            #email="ngModel"
+          >
+          <div class="error-message" *ngIf="email.invalid && email.touched">
+            Valid email is required
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">Password</label>
+          <input
+            type="password"
+            class="form-input"
+            [(ngModel)]="registerData.password"
+            name="password"
+            required
+            minlength="6"
+            #password="ngModel"
+          >
+          <div class="error-message" *ngIf="password.invalid && password.touched">
+            Password must be at least 6 characters
+          </div>
+        </div>
+
+        <button
+          type="submit"
+          class="btn btn-primary btn-block"
+          [disabled]="registerForm.invalid || isLoading"
+        >
+          {{ isLoading ? 'Registering...' : 'Register' }}
+        </button>
+      </form>
+
+      <div class="auth-toggle">
+        <p>Already have an account? <a routerLink="/login">Login here</a></p>
+      </div>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,51 @@
+<div class="main-container">
+  <div class="page-header">
+    <h2>Available Products</h2>
+  </div>
+
+  <div class="alert alert-error" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <div class="alert alert-success" *ngIf="successMessage">
+    {{ successMessage }}
+  </div>
+
+  <div class="loading" *ngIf="isLoading">
+    <div class="spinner"></div>
+    <p>Loading...</p>
+  </div>
+
+  <div class="product-grid" *ngIf="!isLoading">
+    <app-product-card
+      *ngFor="let product of products"
+      [product]="product"
+      (increase)="increaseQuantity(product)"
+      (decrease)="decreaseQuantity(product)"
+    ></app-product-card>
+  </div>
+
+  <div class="cart-summary" *ngIf="getCartItems().length > 0">
+    <h3>Order Summary</h3>
+    <div class="cart-item" *ngFor="let item of getCartItems()">
+      <span>{{ item.name }} × {{ item.orderQty }}</span>
+      <span class="item-price">${{ (item.price * (item.orderQty || 0)).toFixed(2) }}</span>
+    </div>
+    <div class="cart-total">
+      <strong>Total:</strong>
+      <strong class="total-amount">${{ getCartTotal().toFixed(2) }}</strong>
+    </div>
+    <button
+      class="btn btn-success btn-block"
+      (click)="placeOrder()"
+      [disabled]="isLoading"
+    >
+      {{ isLoading ? 'Placing Order...' : 'Place Order' }}
+    </button>
+  </div>
+
+  <div class="empty-state" *ngIf="getCartItems().length === 0 && !isLoading">
+    <div class="empty-icon">🛍️</div>
+    <p>Add products to your cart to place an order</p>
+  </div>
+</div>

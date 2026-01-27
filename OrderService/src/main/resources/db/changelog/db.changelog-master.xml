@@ -9,5 +9,5 @@
     <include file="sql/create-order-table.sql" relativeToChangelogFile="true"/>
     <include file="sql/load-product-data.sql" relativeToChangelogFile="true"/>
 <!--    Commented this table data, as we can use this data to order -->
-<!--    <include file="sql/load-order-data.sql" relativeToChangelogFile="true"/>-->
+<!--    <include file="sql/load-user-data.sql" relativeToChangelogFile="true"/>-->
 </databaseChangeLog>

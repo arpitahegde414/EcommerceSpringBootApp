@@ -18,7 +18,7 @@ import java.util.stream.Collectors;
 @RequiredArgsConstructor
 @Slf4j
 public class DefaultInventoryService implements InventoryHandler {
-
+    //constructer injection & setter injection -- ways singleton object
     private final InventoryRepository inventoryRepository;
 
     public InventoryResponse getInventoryByProductId(Long product_Id) {

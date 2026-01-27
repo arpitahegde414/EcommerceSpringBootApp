@@ -1,0 +1,11 @@
+<header class="header">
+  <div class="header-container">
+    <div class="logo">🛒 E-Commerce</div>
+    <nav>
+      <a routerLink="/home">Home</a>
+      <a routerLink="/place-order">Place Order</a>
+      <a *ngIf="!currentUser" routerLink="/login">Login</a>
+      <button *ngIf="currentUser" (click)="logout()">Logout</button>
+    </nav>
+  </div>
+</header>

@@ -1,0 +1,31 @@
+<div class="product-card">
+  <div class="product-name">{{ product.name }}</div>
+  <div class="product-info">SKU: {{ product.sku }}</div>
+  <div class="product-info">Available: {{ product.quantity }} units</div>
+  <div class="product-price">${{ product.price.toFixed(2) }}</div>
+
+  <div class="quantity-control">
+    <button
+      class="quantity-btn"
+      (click)="onDecrease()"
+      [disabled]="!product.orderQty || product.orderQty <= 0"
+    >
+      -
+    </button>
+    <input
+      type="number"
+      class="quantity-input"
+      [(ngModel)]="product.orderQty"
+      [min]="0"
+      [max]="product.quantity"
+      readonly
+    >
+    <button
+      class="quantity-btn"
+      (click)="onIncrease()"
+      [disabled]="(product.orderQty || 0) >= product.quantity"
+    >
+      +
+    </button>
+  </div>
+</div>
