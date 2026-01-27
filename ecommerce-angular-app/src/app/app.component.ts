@@ -8,7 +8,8 @@ import { RouterOutlet } from '@angular/router';
   standalone: true,
   imports: [CommonModule, HeaderComponent, RouterOutlet],
   template: `
-    <app-header *ngIf="true"></app-header>
+    <app-header></app-header>
+    <router-outlet></router-outlet>
   `,
   styles: []
 })

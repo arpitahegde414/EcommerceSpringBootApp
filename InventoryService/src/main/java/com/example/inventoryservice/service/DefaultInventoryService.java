@@ -3,6 +3,7 @@ package com.example.inventoryservice.service;
 import com.example.inventoryservice.dto.BatchDto;
 import com.example.inventoryservice.dto.InventoryResponse;
 import com.example.inventoryservice.model.InventoryBatch;
+import com.example.inventoryservice.model.Product;
 import com.example.inventoryservice.repository.InventoryRepository;
 import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
@@ -66,5 +67,15 @@ public class DefaultInventoryService implements InventoryHandler {
         if(totalSum>quantity)
             return true;
         return false;
+    }
+
+    @Override
+    public List<Product> getAllProducts() {
+        log.info("Fetching all products from inventory");
+        List<InventoryBatch> batches = inventoryRepository.findAll();
+        return batches.stream()
+                .map(InventoryBatch::getProduct)
+                .distinct()
+                .collect(Collectors.toList());
     }
 }

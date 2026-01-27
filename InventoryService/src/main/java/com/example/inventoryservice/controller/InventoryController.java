@@ -1,6 +1,7 @@
 package com.example.inventoryservice.controller;
 
 import com.example.inventoryservice.dto.InventoryResponse;
+import com.example.inventoryservice.model.Product;
 import com.example.inventoryservice.service.DefaultInventoryService;
 import com.example.inventoryservice.service.InventoryHandler;
 import io.swagger.v3.oas.annotations.Operation;
@@ -9,11 +10,13 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/inventory")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "http://localhost:4200")
 public class InventoryController {
 
     //build inventory service which is needed for the API
@@ -68,5 +71,13 @@ public class InventoryController {
         response.put("available", available);
 
         return ResponseEntity.ok(response);
+    }
+
+    @GetMapping("/products")
+    @Operation(summary = "Get all products in inventory",
+            description = "Returns a list of all products available in the inventory")
+    public ResponseEntity<List<Product>> getProducts() {
+        List<Product> products = inventoryService.getAllProducts();
+        return ResponseEntity.ok(products);
     }
 }
